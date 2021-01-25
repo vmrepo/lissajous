@@ -36,7 +36,11 @@ class LissajousWindow(qt.QMainWindow):
         uic.loadUi("main_window.ui", self)
 
         # Ставим версию и иконку
-        self.setWindowTitle("Генератор фигур Лиссажу. Версия 0.1.0. CC BY-SA 4.0 Ivanov")
+        with open("version.txt", "r") as f:
+            version = f.readline()
+        self.setWindowTitle("Генератор фигур Лиссажу. Версия {}. CC BY-SA 4.0 Ivanov".format(
+            version
+        ))
         scriptDir = os.path.dirname(os.path.realpath(__file__))
         self.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + "icon.bmp"))
 
