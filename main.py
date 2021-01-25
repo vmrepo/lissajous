@@ -20,12 +20,8 @@ default_settings = {
 
 
 # Цвета для matplotlib
-mpl_color_dict = {
-    "Красный": "crimson",
-    "Зелёный": "navy",
-    "Жёлтый": "gold",
-    "Синий": "midnightblue"
-}
+with open("mpl.json", mode="r") as f:
+    mpl_color_dict = json.load(f)
 
 
 class LissajousWindow(qt.QMainWindow):
