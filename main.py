@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import json
 
-from lissajousgen import LissajousGenerator,  lissajous_figure
+from lissajousgen import LissajousGenerator, lissajous_figure
 
 
 # Настройки фигуры по умолчанию
@@ -40,22 +40,69 @@ class LissajousWindow(qt.QMainWindow):
         scriptDir = os.path.dirname(os.path.realpath(__file__))
         self.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + "icon.bmp"))
 
-        self.plot_button.clicked.connect(self.plot_button_click_handler)
+        # Создаём холст matplotlib
+        self._fig = plt.figure(figsize=(4, 3), dpi=72)
+        # Добавляем на холст matplotlib область для построения графиков.
+        # В общем случае таких областей на холсте может быть несколько
+        # Аргументы add_subplot() в данном случае:
+        # ширина сетки, высота сетки, номер графика в сетке
+        self._ax = self._fig.add_subplot(1, 1, 1)
 
+        # Создаём qt-виджет холста для встраивания холста
+        # matplotlib fig в окно Qt.
+        self._fc = FigureCanvas(self._fig)
+        # Связываем созданный холст c окном
+        self._fc.setParent(self)
+        # Настраиваем размер и положение холста
+        self._fc.resize(400, 300)
+        self._fc.move(20, 20)
+
+        # Первичное построение фигуры
+        self.plot_lissajous_figure()
+
+        self.resize(650, 300)
+
+        self.plot_button.clicked.connect(self.plot_button_click_handler)
 
     def plot_button_click_handler(self):
         """
         Обработчик нажатия на кнопку применения настроек
         """
-        print("plot_button_click_handler()")
-        self.plot_lissajous_figure()
+        # Получаем данные из текстовых полей
+        settings = {}
 
-    def plot_lissajous_figure(self):
+        settings["freq_x"] = float(self.freq_x_lineedit.text())
+        settings["freq_y"] = float(self.freq_y_lineedit.text())
+        settings["color"] = mpl_color_dict[self.color_combobox.currentText()]
+        settings["width"] = int(self.width_combobox.currentText())
+
+        # Перестраиваем график
+        self.plot_lissajous_figure(settings)
+
+    def plot_lissajous_figure(self, settings=default_settings):
         """
         Обновление фигуры
         """
-        print("plot_lissajous_figure()")
+        # Удаляем устаревшие данные с графика
+        for line in self._ax.lines:
+            line.remove()
 
+        # Генерируем сигнал для построения
+        self.generator = LissajousGenerator()
+        figure = self.generator.generate_figure(settings["freq_x"],
+                                                settings["freq_y"])
+
+        # Строим график
+        self._ax.plot(figure.x_arr, figure.y_arr,
+                      color=settings["color"], linewidth=settings["width"])
+
+        plt.axis("off")
+
+        # Нужно, чтобы все элементы не выходили за пределы холста
+        plt.tight_layout()
+
+        # Обновляем холст в окне
+        self._fc.draw()
 
 
 if __name__ == "__main__":
