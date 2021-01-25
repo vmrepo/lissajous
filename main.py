@@ -63,6 +63,7 @@ class LissajousWindow(qt.QMainWindow):
         self.resize(650, 300)
 
         self.plot_button.clicked.connect(self.plot_button_click_handler)
+        self.save_button.clicked.connect(self.save_button_click_handler)
 
     def plot_button_click_handler(self):
         """
@@ -103,6 +104,18 @@ class LissajousWindow(qt.QMainWindow):
 
         # Обновляем холст в окне
         self._fc.draw()
+
+    def save_button_click_handler(self):
+        """
+        Обработчик нажатия на кнопку сохранения настроек
+        """
+        file_path, _ = qt.QFileDialog.getSaveFileName(self, "Сохранение изображения", "C:\\",
+                                                            "PNG(*.png);;JPEG(*.jpg *.jpeg);;All Files(*.*) ")
+
+        if file_path == "":
+            return
+
+        raise NotImplementedError("Тут всего одной строчки не хватает.")
 
 
 if __name__ == "__main__":
