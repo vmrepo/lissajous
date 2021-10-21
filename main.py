@@ -20,7 +20,7 @@ default_settings = {
 
 
 # Цвета для matplotlib
-with open("mpl.json", mode="r") as f:
+with open("mpl.json", mode="r", encoding="utf-8") as f:
     mpl_color_dict = json.load(f)
 
 
@@ -115,7 +115,7 @@ class LissajousWindow(qt.QMainWindow):
         if file_path == "":
             return
 
-        raise NotImplementedError("Тут всего одной строчки не хватает.")
+        self._fig.savefig(file_path)
 
 
 if __name__ == "__main__":
