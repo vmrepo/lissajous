@@ -2,7 +2,7 @@ import sys
 import os
 import PyQt5.QtWidgets as qt
 from PyQt5 import uic, QtGui
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAggBase as FigureCanvas
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 import numpy as np
 import json
@@ -107,7 +107,7 @@ class LissajousWindow(qt.QMainWindow):
 
     def save_button_click_handler(self):
         """
-        Обработчик нажатия на кнопку сохранения настроек
+        Обработчик нажатия на кнопку сохранения изображения
         """
         file_path, _ = qt.QFileDialog.getSaveFileName(self, "Сохранение изображения", "C:\\",
                                                             "PNG(*.png);;JPEG(*.jpg *.jpeg);;All Files(*.*) ")
